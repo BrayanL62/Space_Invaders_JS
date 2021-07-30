@@ -3,6 +3,7 @@ let allDivs;
 let alienInvaders = [];
 let shooterPosition = 229;
 let direction = 1;
+let width = 20;
 
 function creationGrilleEtAliens(){
 
@@ -109,3 +110,43 @@ function aliensMoving(){
     }
 }
 // invaderId = setInterval(aliensMoving, 1000);
+
+// Le laser
+
+function tirer(e) {
+    let laserId;
+    let laserEnCours = shooterPosition;
+
+    function deplacementLaser(){
+
+        allDivs[laserEnCours].classList.remove('laser');
+        laserEnCours -= width;
+        allDivs[laserEnCours].classList.add('laser');
+
+        if(allDivs[laserEnCours].classList.contains('aliens')){
+            allDivs[laserEnCours].classList.remove('laser');
+            allDivs[laserEnCours].classList.remove('aliens');
+            allDivs[laserEnCours].classList.add('boom');
+
+            alienInvaders = alienInvaders.filter(el => el !== laserEnCours)
+            setTimeout(() => allDivs[laserEnCours].classList.remove('boom'), 250)
+            clearInterval(laserId);
+        }
+
+        if(laserEnCours < width){
+            clearInterval(laserId);
+            setTimeout(() => {
+                allDivs[laserEnCours].classList.remove('laser');
+            }, 100)
+        }
+
+    }
+
+    if(e.keyCode === 32){
+        laserId = setInterval(() => {
+            deplacementLaser();
+        }, 100);
+    }
+}
+
+document.addEventListener('keyup', tirer);
