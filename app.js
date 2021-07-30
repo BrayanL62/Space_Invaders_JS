@@ -124,7 +124,7 @@ function aliensMoving(){
     }
 
 }
-// invaderId = setInterval(aliensMoving, 100);
+invaderId = setInterval(aliensMoving, 100);
 
 // Le laser
 
