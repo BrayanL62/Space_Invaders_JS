@@ -2,6 +2,7 @@ const container = document.querySelector('.grille');
 let allDivs;
 let alienInvaders = [];
 let shooterPosition = 229;
+let direction = 1;
 
 function creationGrilleEtAliens(){
 
@@ -47,3 +48,64 @@ function creationGrilleEtAliens(){
 }
 
 creationGrilleEtAliens();
+
+function deplacerLeTireur(e){
+    allDivs[shooterPosition].classList.remove('tireur');
+
+    if(e.keyCode === 37){
+        if(shooterPosition > 220){
+            shooterPosition -= 1;
+        }
+    }
+    else if(e.keyCode === 39){
+        if(shooterPosition < 239){
+            shooterPosition += 1;
+        }
+    }
+    allDivs[shooterPosition].classList.add('tireur');
+}
+document.addEventListener('keydown', deplacerLeTireur);
+
+// Bouger les aliens 
+let goDownRight = true;
+let goDownLeft = true;
+
+function aliensMoving(){
+    for(let i = 0; i < alienInvaders.length; i++){
+        if(allDivs[alienInvaders[i]].getAttribute('data-right') === 'true'){
+
+            if(goDownRight){
+                direction = 20;
+                setTimeout(() => {
+                    goDownRight = false;
+                }, 50);
+            } else if(goDownRight === false){
+                direction = -1;
+            }
+            goDownLeft = true;
+
+        } else if(allDivs[alienInvaders[i]].getAttribute('data-left') === 'true') {
+
+            if(goDownLeft){
+                direction = 20;
+                setTimeout(() => {
+                    goDownLeft = false;
+                }, 50);
+            } else if(goDownLeft === false){
+                direction = 1;
+            }
+            goDownRight = true;
+        }
+    }
+
+    for(let i = 0; i < alienInvaders.length; i++){
+        allDivs[alienInvaders[i]].classList.remove('aliens');
+    }
+    for(let i = 0; i<alienInvaders.length; i++){
+        alienInvaders[i] += direction;
+    }
+    for(let i = 0; i<alienInvaders.length; i++){
+        allDivs[alienInvaders[i]].classList.add('aliens');
+    }
+}
+// invaderId = setInterval(aliensMoving, 1000);
