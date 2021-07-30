@@ -1,5 +1,7 @@
 const container = document.querySelector('.grille');
 let allDivs;
+const affichage = document.querySelector('h3');
+let results = 0;
 let alienInvaders = [];
 let shooterPosition = 229;
 let direction = 1;
@@ -108,8 +110,21 @@ function aliensMoving(){
     for(let i = 0; i<alienInvaders.length; i++){
         allDivs[alienInvaders[i]].classList.add('aliens');
     }
+
+    if(allDivs[shooterPosition].classList.contains('aliens', 'tireur')){
+        affichage.textContent = "Game Over";
+        allDivs[shooterPosition].classList.add('boom');
+        clearInterval(invaderId);
+    }
+    for(let i = 0; i < alienInvaders.length; i++){
+        if(alienInvaders[i] > allDivs.length - width){
+            affichage.textContent = "Game Over";
+            clearInterval(invaderId);
+        }
+    }
+
 }
-// invaderId = setInterval(aliensMoving, 1000);
+// invaderId = setInterval(aliensMoving, 100);
 
 // Le laser
 
@@ -131,6 +146,14 @@ function tirer(e) {
             alienInvaders = alienInvaders.filter(el => el !== laserEnCours)
             setTimeout(() => allDivs[laserEnCours].classList.remove('boom'), 250)
             clearInterval(laserId);
+
+            results++;
+            if(results === 36){
+                affichage.textContent = "Bravo, c'est gagné !";
+                clearInterval(invaderId);
+            } else {
+                results.textContent = `Score : ${results}`;
+            }
         }
 
         if(laserEnCours < width){
@@ -145,7 +168,7 @@ function tirer(e) {
     if(e.keyCode === 32){
         laserId = setInterval(() => {
             deplacementLaser();
-        }, 100);
+        }, 1000);
     }
 }
 
